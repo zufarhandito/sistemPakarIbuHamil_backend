@@ -4,7 +4,6 @@ import multer from "multer";
 import path from "path";
 import sequelize from "sequelize";
 
-
 const getUser = async(req,res) => {
     const response = await User.findAll();
     if(response == "") return res.status(404).json({message: "User tidak ditemukan"})
@@ -47,14 +46,16 @@ const createUser = async(req,res) => {
     }
 
     const hashedPassword = await argon2.hash(password);
-    try {
-        await User.create({
+    const { data, created } = User.findOrCreate({
+        where: {
+            email: email
+        },
+        defaults: {
             image: photo,
             name: name,
             fullName: fullName,
             firstName: firstName,
             lastName: lastName,
-            email: email,
             gender: gender,
             password: hashedPassword,
             role: roled,
@@ -65,7 +66,11 @@ const createUser = async(req,res) => {
             Kapanewon: kapanewon,
             Kabupaten: kabupaten,
             Provinsi: provinsi
-        });
+        }
+    })
+    try {
+        await data;
+        if(!created) return res.status(401).json({message: "Email telah terdaftar"})
         res.status(201).json({message: "User telah ditambahkan"})
     } catch (error) {
         res.status(500).json({message: error.message});
