@@ -33,8 +33,8 @@ app.use(session({
 
 app.use(cors({
     credentials: true,
-    origin: 'https://localhost:3000'
-}))
+    origin: 'http://localhost:3000'
+}));
 
 app.use('/images',express.static('./images'));
 
