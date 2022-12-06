@@ -9,11 +9,10 @@ import sequelizeStore from "connect-session-sequelize";
 import aturanRoute from "./routes/aturanRoute.js";
 import gejalaRoute from "./routes/gejalaRoute.js";
 import penyakitRoute from "./routes/penyakitRoute.js";
-import rekamRoute from "./routes/rekamRoute.js";
 import userRoute from "./routes/userRoute.js";
 import diagnosisRoute from "./routes/diagnosisRoute.js";
 import authRoute from "./routes/Auth/auth.js";
-import {verifyLogin,isAdmin} from "./middleware/authUser.js"
+import {verifyLogin,isAdmin, isPakar} from "./middleware/authUser.js"
 
 const sessionStore = sequelizeStore(session.Store)
 const store = new sessionStore({
@@ -27,7 +26,7 @@ app.use(session({
     store: store,
     saveUninitialized: true,
     cookie: {
-        secure: 'auto'
+        secure: 'auto',
     }
 }))
 
@@ -36,14 +35,19 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
+const middlewarenya = {
+    auth: verifyLogin,
+    isAdmin: isAdmin,
+    isPakar: isPakar
+}
+
 app.use('/images',express.static('./images'));
 
 app.use(express.json());
 app.use(authRoute);
-app.use('/aturan',verifyLogin,isAdmin,aturanRoute);
-app.use('/gejala',gejalaRoute);
-app.use('/penyakit',penyakitRoute);
-app.use('/rekam',verifyLogin,rekamRoute);
+app.use('/aturan',isPakar,aturanRoute);
+app.use('/gejala',isPakar,gejalaRoute);
+app.use('/penyakit',isPakar,penyakitRoute);
 app.use('/users',userRoute);
 app.use('/diagnosis',diagnosisRoute);
 

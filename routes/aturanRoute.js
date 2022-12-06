@@ -12,7 +12,7 @@ const router = express.Router();
 router.get('/',getAturan);
 router.get('/:id',getAturanById);
 router.post('/',createAturan);
-router.patch('/:id',updateAturan);
+router.post('/edit/:id',updateAturan);
 router.delete('/:id',deleteAturan);
 
 export default router;

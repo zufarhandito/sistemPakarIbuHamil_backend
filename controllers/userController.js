@@ -29,14 +29,7 @@ const getUserById = async(req,res) => {
 }
 
 const createUser = async(req,res) => {
-    const { name,fullName,firstName,lastName,email,gender,password,role,NIK,RT,RW,kalurahan,kapanewon,kabupaten,provinsi } = req.body;
-
-    let photo;
-    if(! req.file || ! req.file.path) {
-        photo = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=58BB44&color=fff&size=512&bold=true`
-    }else{
-        photo = req.file.path
-    }
+    const { name,fullName,firstName,lastName,email,gender,password,role,NIK,RT,RW,alamatLengkap,tempatLahir,tanggalLahir,noHP,lainLain} = req.body;
 
     let roled;
     if(!role){
@@ -46,12 +39,12 @@ const createUser = async(req,res) => {
     }
 
     const hashedPassword = await argon2.hash(password);
-    const { data, created } = User.findOrCreate({
+    const [ data, created ] = await User.findOrCreate({
         where: {
             email: email
         },
         defaults: {
-            image: photo,
+            image: `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=random`,
             name: name,
             fullName: fullName,
             firstName: firstName,
@@ -62,19 +55,15 @@ const createUser = async(req,res) => {
             NIK: NIK,
             RT: RT,
             RW: RW,
-            Kalurahan: kalurahan,
-            Kapanewon: kapanewon,
-            Kabupaten: kabupaten,
-            Provinsi: provinsi
+            alamatLengkap: alamatLengkap,
+            tempatLahir: tempatLahir,
+            tanggalLahir: tanggalLahir,
+            noHP: noHP,
+            lainLain: lainLain
         }
     })
-    try {
-        await data;
-        if(!created) return res.status(401).json({message: "Email telah terdaftar"})
-        res.status(201).json({message: "User telah ditambahkan"})
-    } catch (error) {
-        res.status(500).json({message: error.message});
-    }
+    if(!created) return res.status(400).json({message: "Email sudah ada"})
+    res.status(200).json({message:"User berhasil ditambahkan!"})
 }
 
 const updateUser = async(req,res) => {
@@ -86,7 +75,7 @@ const updateUser = async(req,res) => {
 
     if(!response) return res.status(404).json({message: "User tidak ditemukan"});
 
-    const { name,fullName,firstName,lastName,email,gender,password,role,NIK,RT,RW,kalurahan,kapanewon,kabupaten,provinsi } = req.body;
+    const { name,fullName,firstName,lastName,email,gender,password,role,NIK,RT,RW,alamatLengkap,tempatLahir,tanggalLahir,noHP,lainLain } = req.body;
 
     let hashed;
     if(password == "" || password == null) {
@@ -97,7 +86,7 @@ const updateUser = async(req,res) => {
 
     try {
         await User.update({
-            image: req.file.path,
+            // image: req.file.path,
             name: name,
             fullName: fullName,
             firstName: firstName,
@@ -109,10 +98,11 @@ const updateUser = async(req,res) => {
             NIK: NIK,
             RT: RT,
             RW: RW,
-            Kalurahan: kalurahan,
-            Kapanewon: kapanewon,
-            Kabupaten: kabupaten,
-            Provinsi: provinsi
+            alamatLengkap: alamatLengkap,
+            tempatLahir: tempatLahir,
+            tanggalLahir: tanggalLahir,
+            noHP: noHP,
+            lainLain: lainLain
         },{
             where: {
                 id: response.id

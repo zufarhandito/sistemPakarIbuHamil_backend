@@ -1,12 +1,12 @@
 import express from "express";
 import {
-    getGejala,
-    kirimGejala
-} from "../controllers/diagnosisController.js"
+    hitungCF,
+    getGejala
+} from "../controllers/diagnosisController.js";
 
-const route = express.Router();
+const router = express.Router();
 
-route.get('/',getGejala);
-route.post('/',kirimGejala);
+router.post('/',hitungCF);
+router.get('/gejalas',getGejala)
 
-export default route;
+export default router;

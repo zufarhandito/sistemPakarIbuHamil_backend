@@ -6,6 +6,7 @@ import {
     updateGejala,
     deleteGejala
 } from "../controllers/gejalaController.js";
+import { isPakar } from "../middleware/authUser.js";
 
 const router = express.Router();
 

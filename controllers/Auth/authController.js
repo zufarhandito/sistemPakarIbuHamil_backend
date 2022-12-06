@@ -1,6 +1,35 @@
 import User from "../../models/User.js";
 import argon2 from "argon2";
 
+const register = async(req,res) => {
+    const { name,fullName,firstName,lastName,email,gender,password,role,NIK,RT,RW,Kalurahan,Kapanewon,Kabupaten,Provinsi } = req.body;
+
+    const hashedPassword = await argon2.hash(password);
+    const [ data, created ] = await User.findOrCreate({
+        where: {
+            email: email
+        },
+        defaults: {
+            name: name,
+            fullName: fullName,
+            firstName: firstName,
+            lastName: lastName,
+            gender: gender,
+            password: hashedPassword,
+            role: "pasien",
+            NIK: NIK,
+            RT: RT,
+            RW: RW,
+            Kalurahan: Kalurahan,
+            Kapanewon: Kapanewon,
+            Kabupaten: Kabupaten,
+            Provinsi: Provinsi
+        }
+    })
+    if(!created) return res.status(400).json({message: "Email sudah ada"})
+    res.status(200).json({message:"Registrasi Berhasil! silahkan login"})
+}
+
 const login = async(req,res)=> {
     const user = await User.findOne({
         where:{
@@ -41,7 +70,10 @@ const logout = (req,res) => {
 const me = async(req,res) => {
     if(!req.session.userId) return res.status(401).json({message: "please login first"});
     const user = await User.findOne({
-        attributes: ['uuid','fullName','firstName','lastName','Gender','role']
+        attributes: ['uuid','image','fullName','firstName','lastName','email','Gender','role','NIK','RT','RW','alamatLengkap','tempatLahir','tanggalLahir','noHP','lainLain'],
+        where: {
+            uuid: req.session.userId
+        }
     });
     if(!user) return res.status(404).json({message: "user not found"});
     res.status(200).json(user);
@@ -49,6 +81,7 @@ const me = async(req,res) => {
 
 export {
     login,
+    register,
     logout,
     me
 }

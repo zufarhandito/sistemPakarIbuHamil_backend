@@ -11,12 +11,8 @@ const Aturan = db.define('aturans',{
         defaultValue: DataTypes.UUIDV4,
         allowNull: false
     },
-    penyakitId: {
-        type: DataTypes.INTEGER,
-        allowNull:false
-    },
-    gejalaId: {
-        type: DataTypes.INTEGER,
+    MB: {
+        type: DataTypes.FLOAT,
         allowNull: false
     },
     MD: {
@@ -28,10 +24,13 @@ const Aturan = db.define('aturans',{
     freezeTableName: true
 });
 
+Penyakit.belongsToMany(Gejala,{through: Aturan});
+Gejala.belongsToMany(Penyakit,{through: Aturan});
+
 Penyakit.hasMany(Aturan);
-Aturan.belongsTo(Penyakit,{foreignKey:'penyakitId'});
+Aturan.belongsTo(Penyakit);
 
 Gejala.hasMany(Aturan);
-Aturan.belongsTo(Gejala,{foreignKey:'gejalaId'});
+Aturan.belongsTo(Gejala);
 
 export default Aturan

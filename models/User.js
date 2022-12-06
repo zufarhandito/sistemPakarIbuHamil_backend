@@ -52,18 +52,22 @@ const User = db.define('users',{
     RW: {
         type: DataTypes.STRING
     },
-    Kalurahan: {
+    alamatLengkap: {
         type: DataTypes.STRING
     },
-    Kapanewon: {
+    tempatLahir: {
         type: DataTypes.STRING
     },
-    Kabupaten: {
+    tanggalLahir: {
+        type: DataTypes.DATEONLY
+    },
+    noHP: {
         type: DataTypes.STRING
     },
-    Provinsi: {
-        type: DataTypes.STRING
+    lainLain: {
+        type: DataTypes.TEXT
     }
+    
 
 },{
     freezeTableName: true
