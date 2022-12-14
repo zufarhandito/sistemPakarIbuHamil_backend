@@ -1,6 +1,5 @@
 // import Sequelize from "sequelize";
 // import db from "../config/db.js";
-// import Gejala from "./Gejala.js";
 // import Penyakit from "./Penyakit.js";
 // import User from "./User.js";
 
@@ -20,7 +19,7 @@
 //         type: DataTypes.INTEGER,
 //         allowNull:false
 //     },
-//     gejalaId: {
+//     CF: {
 //         type: DataTypes.INTEGER,
 //         allowNull:false
 //     }
@@ -28,15 +27,14 @@
 //     freezeTableName: true
 // });
 
-// User.hasOne(Rekam);
-// Rekam.belongsTo(User,{foreignKey: 'userId'})
+// User.belongsToMany(Penyakit,{through: Rekam})
+// Penyakit.belongsToMany(User,{through: Rekam})
 
-// Penyakit.hasOne(Rekam);
-// Rekam.belongsTo(Penyakit,{foreignKey: 'penyakitId'})
+// User.hasMany(Rekam);
+// Rekam.belongsTo(User);
 
-// Gejala.hasOne(Rekam);
-// Rekam.belongsTo(Gejala,{foreignKey: 'gejalaId'})
-
+// Penyakit.hasMany(Rekam);
+// Rekam.belongsTo(Penyakit);
 
 
 

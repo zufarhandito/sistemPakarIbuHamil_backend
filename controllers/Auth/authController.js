@@ -70,7 +70,7 @@ const logout = (req,res) => {
 const me = async(req,res) => {
     if(!req.session.userId) return res.status(401).json({message: "please login first"});
     const user = await User.findOne({
-        attributes: ['uuid','image','fullName','firstName','lastName','email','Gender','role','NIK','RT','RW','alamatLengkap','tempatLahir','tanggalLahir','noHP','lainLain'],
+        attributes: ['id','uuid','image','fullName','firstName','lastName','email','Gender','role','NIK','RT','RW','alamatLengkap','tempatLahir','tanggalLahir','noHP','lainLain'],
         where: {
             uuid: req.session.userId
         }

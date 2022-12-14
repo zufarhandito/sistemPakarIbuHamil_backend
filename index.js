@@ -12,6 +12,10 @@ import penyakitRoute from "./routes/penyakitRoute.js";
 import userRoute from "./routes/userRoute.js";
 import diagnosisRoute from "./routes/diagnosisRoute.js";
 import authRoute from "./routes/Auth/auth.js";
+import feedbackRoute from "./routes/feedbackRoute.js";
+import articleRoute from "./routes/Article/articleRoute.js"
+import articleCategoryRoute from "./routes/Article/articleCategoryRoute.js"
+
 import {verifyLogin,isAdmin, isPakar} from "./middleware/authUser.js"
 
 const sessionStore = sequelizeStore(session.Store)
@@ -35,12 +39,6 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
-const middlewarenya = {
-    auth: verifyLogin,
-    isAdmin: isAdmin,
-    isPakar: isPakar
-}
-
 app.use('/images',express.static('./images'));
 
 app.use(express.json());
@@ -49,13 +47,17 @@ app.use('/aturan',isPakar,aturanRoute);
 app.use('/gejala',isPakar,gejalaRoute);
 app.use('/penyakit',isPakar,penyakitRoute);
 app.use('/users',userRoute);
+app.use('/feedback',feedbackRoute);
+app.use('/article',articleRoute);
+app.use('/articleCategory',articleCategoryRoute);
+// app.use('/rekams',rekamRoute)
 app.use('/diagnosis',diagnosisRoute);
 
 
 // (async() => {
 //     await db.sync();
 // })();
-// store.sync();
+// store.sync(); 
 app.listen(process.env.APP_PORT, () => {
     console.log(`server running on ${process.env.APP_PORT}`);
 });
