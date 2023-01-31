@@ -8,3 +8,4 @@ front-end dapat diakses [disini](https://github.com/zufarhandito/sistemPakarIbuH
 `npm install`
 
 2. setting database di *./config/db.js*
+3. run `npm run start`
